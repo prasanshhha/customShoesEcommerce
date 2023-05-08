@@ -38,6 +38,9 @@
                             </ul>
                         </li>
                         <li class="nav-item ms-4">
+                            <a class="nav-link" href="#">Sign Up</a>
+                        </li>
+                        <li class="nav-item ms-4">
                             <a class="nav-link" href="#">Admin Portal</a>
                         </li>
                     </ul>
