@@ -1,6 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
 *{
     font-family: 'Poppins', sans-serif;
+    /* border: 1px solid black; */
+}
+
+.navbar .container-fluid{
+    background-color: #f8f9fa;
+}
+
+
+.navbar, .navbar .container-fluid{
+    background-color: white;
+}
+
+.navbar .container-fluid a, .logout-button{
+    text-decoration: none;
+    color: black;
+}
+
+.navbar .container-fluid a:hover, .logout-button:hover, .nav-search i:hover{
+    color: orange;
+}
+
+.customize-button{
+    background-color: white;
+}
+
+.customize-button:hover{
+    background-color: orange;
 }
 
 .search-btn{
@@ -20,7 +47,7 @@
 .video-background-holder {
     position: relative;
     background-color: black;
-    height: 100vh;
+    height: 93vh;
     min-height: 25rem;
     width: 100%;
     overflow: hidden;
@@ -139,4 +166,31 @@
     text-align: center;
     padding-top: 30px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Content wrapper */
+.page-content{
+    margin-top: 7vh;
+    min-height: 93vh;
+}
+
+/* auth pages */
+.auth-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 93vh;
+    background-image: linear-gradient(rgba(84, 84, 84, 0.608), rgba(84, 84, 84, 0.608)), url("../images/bg3.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.card {
+    width: 40%; 
+    background-color: rgba(255, 255, 255, 0.678);
+    backdrop-filter: blur(15px);
+}
+
+.auth-form {
+    font-size: 18px;
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
@@ -21,6 +22,12 @@ use App\Http\Controllers\OrderItemController;
 Route::get('/', function () {
     return view('index');
 });
+
+Route::get('/login', [AuthController::class, 'login']);
+Route::get('/signUp', [AuthController::class, 'signUp']);
+Route::post('/login', [AuthController::class, 'handleLogin']);
+Route::post('/signUp', [AuthController::class, 'handleSignUp']);
+Route::post('/logout', [AuthController::class, 'logout']);
 
  //user routes
  Route::get('/user', [UserController::class, 'index']);
