@@ -15,8 +15,8 @@
                 <h1 class="display-4">FIND YOUR PERFECT PAIR</h1>
                 <p class="lead mb-3">Create the shoes of your dreams.</p>
                 <p class="lead">
-                    <a href="#" class="text-white">
-                        <button class="btn customize-button">Customize</button>
+                    <a href="{{ route('categories.all') }}" class="text-white">
+                        <button class="btn customize-button">View Products</button>
                     </a>
                 </p>
             </div>
@@ -35,25 +35,40 @@
 {{-- Popular items --}}
 <section class="popular-items container mb-5 pb-5">
     <h2 class="mb-5">Popular Items</h2>
-    <div class="row mb-5">
-        <div class="col-md-4">
-            <img src="{{ asset("assets/images/doggo.jpg") }}" alt="Product 1">
-            <h3 class="mt-3">Sneakers</h3>
-            <p>Nrs. 3500</p>
-            <button class="btn btn-primary">Add to Cart</button>
+    <div class="row row-cols-3 mb-5">
+        @forelse ($populars as $popular)
+        <div  class="product-card col mb-4">
+            <a href="/viewProduct/{{ $popular->id }}">
+                <div class="product-img">
+                    <img src="{{ asset($popular->thumbnail)}}" class="main-img" alt="img">
+                    <img src="{{ asset($popular->image_one)}}" class="overlay-img" alt="img">
+                </div>
+                <h5 class="mt-2">{{ $popular->name }}</h5>
+            </a>
+            <span class="wishlist-heart"><i class="fa-regular fa-heart"></i></span>
+            <span class="wishlist-heart-top"><a href="/addToWishlist/{{ $popular->id }}"><i class="fa-solid fa-heart"></i></a></span>
+            <p class="fw-bold">Nrs. {{ $popular->price }}</p>
+            <a href="/addToCart/{{ $popular->id }}"><button class="btn btn-primary">Add To Cart</button></a>
         </div>
-        <div class="col-md-4">
-            <img src="{{ asset("assets/images/shoePic.jpg") }}" alt="Product 2">
-            <h3 class="mt-3">Nike A1</h3>
-            <p>Nrs. 3500</p>
-            <button class="btn btn-primary">Add to Cart</button>
-        </div>
-        <div class="col-md-4">
-            <img src="{{ asset("assets/images/custom.webp") }}" alt="Product 3">
-            <h3 class="mt-3">Nike A1</h3>
-            <p>Nrs. 3500</p>
-            <button class="btn btn-primary">Add to Cart</button>
-        </div>
+        @empty
+            
+        @endforelse
     </div>
 </section>
+@endsection
+
+@section('scripts')
+<script>
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
+</script>
 @endsection

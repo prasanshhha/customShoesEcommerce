@@ -15,7 +15,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::all();
+        $orders = Order::where('status', 'ordered')->get();
         return view('admin.order.index')->with(compact('orders'));
     }
 
@@ -39,7 +39,7 @@ class OrderController extends Controller
     {
         $input = $request->validated();
         $order = Order::create($input);
-        return redirect("/order")->with('message', 'New order added!');
+        return redirect()->route('admin.order.index')->with('message', 'New order added!');
     }
 
     /**
@@ -77,7 +77,7 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($id);
         $order->update($request->validated());
-        return redirect('/order')->with('message', 'Order updated!');
+        return redirect()->route('admin.order.index')->with('message', 'Order updated!');
     }
 
     /**
@@ -90,6 +90,17 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($id);
         $order->delete();
-        return redirect('/order')->with('success','Order deleted!');
+        return redirect()->route('admin.order.index')->with('success','Order deleted!');
+    }
+
+    public function toggleStatus($id){
+        $order = Order::findOrFail($id);
+        if($order->payment_status == 'pending'){
+            $order['payment_status'] = "complete";
+        }else{
+            $order['payment_status'] = "pending";
+        }
+        $order->save();
+        return redirect()->route('admin.order.index')->with('message', 'Status updated!');
     }
 }

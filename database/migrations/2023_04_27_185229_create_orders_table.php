@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('contact');
             $table->float('total', 8, 2);
             $table->enum('status', ['ordered', 'cart', 'wishlist']);
-            $table->enum('payment_status', ['pending', 'complete']);
-            $table->enum('payment_method', ['cash_on_delivery', 'esewa']);
+            $table->enum('payment_status', ['pending', 'complete'])->default('pending');
+            $table->enum('payment_method', ['cash_on_delivery', 'esewa'])->nullable();
             $table->timestamps();
         });
     }

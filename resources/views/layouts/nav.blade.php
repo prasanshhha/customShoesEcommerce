@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
             <img src="{{ asset("assets/images/title-logo.png") }}" alt="Logo" width="150" height="auto" class="d-inline-block align-text-top">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -9,20 +9,17 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item ms-4">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
                 </li>
                 <li class="nav-item dropdown ms-4">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="{{ route('categories.all') }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Products
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">All</a></li>
-                        <li><a class="dropdown-item" href="#">Sneakers</a></li>
-                        <li><a class="dropdown-item" href="#">Nike A1</a></li>
-                        <li><a class="dropdown-item" href="#">Anime</a></li>
-                        <li><a class="dropdown-item" href="#">Florals</a></li>
-                        <li><a class="dropdown-item" href="#">Cartoon</a></li>
-                        <li><a class="dropdown-item" href="#">Custom designs</a></li>
+                        <li><a class="dropdown-item" href="{{ route('categories.all') }}">All</a></li>
+                        @foreach ($categories as $category)
+                            <li><a class="dropdown-item" href="/category/{{ $category->id }}">{{ $category->name }}</a></li>
+                        @endforeach
                     </ul>
                 </li>
                 @if (auth()->check())
@@ -38,11 +35,17 @@
                 </li>
                 @endif
             </ul>
-            <form class="d-flex ms-4 nav-search" role="search">
-                <input class="me-2 search-box" type="search" placeholder="Search" aria-label="Search">
+            <form class="d-flex ms-4 nav-search" role="search" method="GET" action="/search">
+                <input name="search" class="me-2 search-box" type="search" placeholder="Search" aria-label="Search">
                 <button class="search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <a href="#" class="align-self-center text-dark  mx-3"><i class="fa-solid fa-cart-shopping"></i></a>
-                <a href="#" class="align-self-center text-dark"><i class="fa-solid fa-heart"></i></a>
+                <a href="/cart" class="align-self-center text-dark  mx-3"><i class="fa-solid fa-cart-shopping"></i></a>
+                @if (isset($cartCount) && $cartCount>0)
+                <span class="cart-notif"></span>
+                @endif
+                @if (isset($wishlistCount) && $wishlistCount>0)
+                <span class="wishlist-notif"></span>
+                @endif
+                <a href="/wishList" class="align-self-center text-dark"><i class="fa-solid fa-heart"></i></a>
             </form>
         </div>
     </div>

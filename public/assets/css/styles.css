@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
 *{
     font-family: 'Poppins', sans-serif;
-    /* border: 1px solid black; */
 }
 
+/* Navbar */
 .navbar .container-fluid{
     background-color: #f8f9fa;
 }
@@ -44,6 +44,33 @@
     background-color: transparent;
 }
 
+.wishlist-notif, .cart-notif{
+    background-color: red;
+    position: absolute;
+    border-radius: 50%;
+    height: 8px;
+    width: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.nav-search{
+    position: relative;
+}
+
+.wishlist-notif{
+    top: 6px;
+    right: 12px;
+}
+
+.cart-notif{
+    top: 6px;
+    right: 45px;
+}
+
+/* Full page Video */
 .video-background-holder {
     position: relative;
     background-color: black;
@@ -90,6 +117,7 @@
     object-fit: cover;
 }
 
+/* Footer */
 .footer {
     font-size: 14px;
     background-color: #1f1f24;
@@ -193,4 +221,103 @@
 
 .auth-form {
     font-size: 18px;
+}
+
+/* Product pages */
+.product-card{
+    position: relative;
+    padding: 0 15px;
+}
+
+.product-img img{
+    height: 300px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.product-img .overlay-img{
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 15.5px;
+    height: 300px;
+    width: 92.9%;
+    object-fit: cover;
+    transition: all ease 0.2s;
+}
+
+.product-img .overlay-img:hover{
+    opacity: 1;
+    transform: scale(1.005);
+}
+
+.product-card a{
+    text-decoration: none;
+    color: black;
+}
+
+.product-card p{
+    font-size: 18px;
+}
+
+.wishlist-heart, .wishlist-heart-top, .wishlist-remove{
+    font-size: 22px;
+    z-index: 5000;
+    position: absolute;
+    top: 5px;
+    right: 25px;
+}
+
+.wishlist-heart i, .wishlist-heart-top i, .wishlist-remove i{
+    color: rgb(201, 190, 190);
+}
+
+.wishlist-heart-top{
+    opacity: 0;
+}
+
+.wishlist-heart:hover, .wishlist-heart-top:hover{
+    opacity: 1;
+}
+
+.wishlist-remove i:hover{
+    color: rgb(137, 137, 137);
+}
+
+/* Cart page */
+.order-total{
+    font-size: 20px;
+}
+
+.grandTotal{
+    font-size: 20px;
+}
+
+.checkout-table{
+    font-size: 17px;
+}
+
+/* Product page */
+.product-slider img{
+    height: 500px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.product-buttons button{
+    font-size: 18px;
+}
+
+.product-buttons i{
+    font-size: 25px;
+    margin-top: 5px;
+    color: rgb(194, 194, 194);
+}
+
+.product-buttons i:hover{
+    color: rgb(141, 140, 140);
+}
+
+.product .price{
+    font-size: 20px;
 }

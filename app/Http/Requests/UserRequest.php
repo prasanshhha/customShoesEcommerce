@@ -25,9 +25,8 @@ class UserRequest extends FormRequest
     {
         return [
             'name'=>'required|max:255',
-            'email'=>'required|email|unique:users,email,'.$this->id,
-            'password'=>'required_unless:_method,PUT|min:7|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
-            // 'role'=>'required|in:admin, customer',
+            'email'=>'required|email|unique:users,email,'.$this->route()?->user,
+            'is_admin'=>'required|boolean',
             'phone_number'=>'required|integer|min_digits:7|max_digits:10|min:0'
         ];
     }

@@ -39,7 +39,7 @@ class CategoryController extends Controller
     {
         $input = $request->validated();
         $category = Category::create($input);
-        return redirect("/category")->with('message', 'New category added!');
+        return redirect()->route('admin.category.index')->with('message', 'New category added!');
     }
 
     /**
@@ -63,7 +63,7 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $category = Category::findOrFail($id);
-        return view('admin.category.edit')->with(compact('category'));
+        return view('admin.category.update')->with(compact('category'));
     }
 
     /**
@@ -77,7 +77,7 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($id);
         $category->update($request->validated());
-        return redirect('/category')->with('message', 'Category updated!');
+        return redirect()->route('admin.category.index')->with('message', 'Category updated!');
     }
 
     /**
@@ -90,6 +90,6 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($id);
         $category->delete();
-        return redirect('/category')->with('success','Category deleted!');
+        return redirect()->route('admin.category.index')->with('success','Category deleted!');
     }
 }

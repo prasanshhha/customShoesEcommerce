@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\SignInRequest;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +25,9 @@ class AuthController extends Controller
     public function handleLogin(LoginRequest $request)
     {
         $data = $request->validated();
- 
+        if(! User::where('email', $request->email)->first()){
+            return back()->with('error', 'This email is not registered.');
+        }
         if (Auth::attempt($data)) {
 
             $user = auth()->user();    
@@ -33,20 +35,25 @@ class AuthController extends Controller
             auth()->login($user);
 
             $request->session()->regenerate();
-            return redirect('/');
+
+            if ($user->isAdmin()) {
+                return redirect()->route('admin.dashboard')->with('error', "You are logged in!");
+            }
+            return redirect()->route('home')->with('success', 'You are logged in!');
         }
  
         return back()->with('error', 'The provided credentials do not match our records.');
     }
 
-    public function handleSignUp(UserRequest $request)
+    public function handleSignUp(SignInRequest $request)
     {
         $input = $request->validated();
         $password = $request->get('password'); 
         $hashedPassword = Hash::make($password);
         $input['password'] = $hashedPassword;
         $user = User::create($input);
-        return redirect("/")->with('message', 'You are logged in!');
+        auth()->login($user);
+        return redirect('/')->with('success', 'You are now logged in!');
     }
 
     public function logout(Request $request)
@@ -54,7 +61,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/')->with('message', 'You are logged out!');
+        return redirect('/')->with('success', 'You are logged out!');
     }
 
 }

@@ -7,6 +7,10 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderItemController;
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\UserPagesController;
+use App\Http\Controllers\UserOrderController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -19,52 +23,40 @@ use App\Http\Controllers\OrderItemController;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
+Route::get('/', [UserPagesController::class, 'homepage'])->name('home');
+Route::get('/search', [UserPagesController::class, 'search']);
+Route::get('/viewProduct/{id}', [UserPagesController::class, 'viewProduct']);
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/addToCart/{id}', [UserOrderController::class, 'addToCart']);
+    Route::get('/addToWishlist/{id}', [UserOrderController::class, 'addToWishlist']);
+    Route::get('/cart', [UserPagesController::class, 'cart']);
+    Route::get('/wishList', [UserPagesController::class, 'wishList']);
+    Route::get('/removeFromWishlist/{id}', [UserOrderController::class, 'removeFromWishlist']);
+    Route::get('/removeFromCart/{id}', [UserOrderController::class, 'removeFromCart']);
+    Route::get('/updateQuantity', [UserOrderController::class, 'updateQuantity']);
+    Route::get('/checkout', [UserPagesController::class, 'checkout']);
 });
 
-Route::get('/login', [AuthController::class, 'login']);
-Route::get('/signUp', [AuthController::class, 'signUp']);
-Route::post('/login', [AuthController::class, 'handleLogin']);
-Route::post('/signUp', [AuthController::class, 'handleSignUp']);
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::name('categories.')->group(function(){
+    Route::get('/categories/all', [UserPagesController::class, 'allCategories'])->name('all');
+    Route::get('/category/{id}', [UserPagesController::class, 'selectedCategory']);
+});
 
- //user routes
- Route::get('/user', [UserController::class, 'index']);
- Route::get('/user/create', [UserController::class, 'create']);
- Route::post('/user', [UserController::class, 'store']);
- Route::get('/user/edit/{id}', [UserController::class, 'edit']);
- Route::put('/user/{id}', [UserController::class, 'update']);
- Route::delete('/user/{id}', [UserController::class, 'destroy']);
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/signUp', [AuthController::class, 'signUp'])->name('signUp');
+Route::post('/login', [AuthController::class, 'handleLogin'])->name('handleLogin');
+Route::post('/signUp', [AuthController::class, 'handleSignUp'])->name('handleSignUp');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-  //category routes
-  Route::get('/category', [CategoryController::class, 'index']);
-  Route::get('/category/create', [CategoryController::class, 'create']);
-  Route::post('/category', [CategoryController::class, 'store']);
-  Route::get('/category/edit/{id}', [CategoryController::class, 'edit']);
-  Route::put('/category/{id}', [CategoryController::class, 'update']);
-  Route::delete('/category/{id}', [CategoryController::class, 'destroy']);
+// Admin Routes
+Route::middleware(['role:admin'])->name('admin.')->prefix('admin')->group(function(){
+    Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
+    Route::resource('user', UserController::class);
+    Route::resource('category', CategoryController::class);
+    Route::resource('product', ProductController::class);
+    Route::resource('order', OrderController::class);
+    Route::resource('orderItem', OrderItemController::class);
+    Route::get('/order/toggleStatus/{id}', [OrderController::class, 'toggleStatus']);
+});
 
-  //product routes
-  Route::get('/product', [ProductController::class, 'index']);
-  Route::get('/product/create', [ProductController::class, 'create']);
-  Route::post('/product', [ProductController::class, 'store']);
-  Route::get('/product/edit/{id}', [ProductController::class, 'edit']);
-  Route::put('/product/{id}', [ProductController::class, 'update']);
-  Route::delete('/product/{id}', [ProductController::class, 'destroy']);
-
-  //order routes
-  Route::get('/order', [OrderController::class, 'index']);
-  Route::get('/order/create', [OrderController::class, 'create']);
-  Route::post('/order', [OrderController::class, 'store']);
-  Route::get('/order/edit/{id}', [OrderController::class, 'edit']);
-  Route::put('/order/{id}', [OrderController::class, 'update']);
-  Route::delete('/order/{id}', [OrderController::class, 'destroy']);
-
-  //orderItem routes
-  Route::get('/orderItem', [OrderItemController::class, 'index']);
-  Route::get('/orderItem/create', [OrderItemController::class, 'create']);
-  Route::post('/orderItem', [OrderItemController::class, 'store']);
-  Route::get('/orderItem/edit/{id}', [OrderItemController::class, 'edit']);
-  Route::put('/orderItem/{id}', [OrderItemController::class, 'update']);
-  Route::delete('/orderItem/{id}', [OrderItemController::class, 'destroy']);
