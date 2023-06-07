@@ -31,14 +31,9 @@
 
     <div class="col-md-6">
         <div class="row align-items-center">
-            <label for="is_admin" class=" col-md-4 form-label">Role<span class="text-danger"><b>*</b></span></label>
-            <select name="is_admin" class="form-select" aria-label="Default select example">
-                <option selected disabled>-- Choose role  --</option>
-                <option value="0" {{ !empty(old('is_admin')) && old('is_admin') == 0 ? 'selected' : '' }}
-                    {{ isset($user) && $user->is_admin == 0 && empty(old('is_admin')) ? 'selected' : '' }}>Customer</option>
-                <option value="1" {{ !empty(old('is_admin')) && old('is_admin') == 1 ? 'selected' : '' }}
-                {{ isset($user) && $user->is_admin == 1 && empty(old('is_admin')) ? 'selected' : '' }}>Admin</option>
-            </select>
+            <label for="is_admin" class=" col-md-4 form-label">Role</label>
+            <input type="text" name="" value="Admin" disabled>
+            <input type="text" name="is_admin" value="1" hidden>
             @error('is_admin')
                 <p class="text-danger">{{ $message }}</p>
             @enderror

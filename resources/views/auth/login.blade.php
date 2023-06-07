@@ -21,7 +21,7 @@
 					<button type="submit" class="btn btn-primary">Log in</button>
 				</div>
             </form>
-			{{-- <div  class="forgot-text mb-1"><a href="/forgot-password" class="forgot-pwd">Forgot Password?</a></div> --}}
+			<div  class="forgot-text mb-1"><a href="/forgot-password" class="forgot-pwd">Forgot Password?</a></div>
 			<div class="sign-up-text">Don't have an account? <a href="/signUp">Sign Up</a></div>
         </div>
     </div>
