@@ -12,6 +12,7 @@ use App\Http\Controllers\UserPagesController;
 use App\Http\Controllers\UserOrderController;
 use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\CustomShoeController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\AdminDashboardController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -48,21 +49,12 @@ Route::post('/email/verification-notification', function (Request $request) {
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 //Reset Password
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-})->middleware('guest')->name('password.request');
-
-Route::post('/forgot-password', function (Request $request) {
-    $request->validate(['email' => 'required|email']);
- 
-    $status = Password::sendResetLink(
-        $request->only('email')
-    );
- 
-    return $status === Password::RESET_LINK_SENT
-                ? back()->with(['status' => __($status)])
-                : back()->withErrors(['email' => __($status)]);
-})->middleware('guest')->name('password.email');
+Route::middleware(['guest'])->name('password.')->group(function(){
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->middleware('guest')->name('request');
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->middleware('guest')->name('email');
+    Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'resetPassword'])->middleware('guest')->name('reset');
+    Route::post('/reset-password', [ForgotPasswordController::class, 'updatePassword'])->middleware('guest')->name('update');
+});
 
 //Logged In routes
 Route::middleware(['auth', 'verified'])->group(function () {
