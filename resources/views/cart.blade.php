@@ -8,7 +8,7 @@
         <h2 class="mb-5 pt-5">My Cart</h2>
         <hr>
         <div class="cart-table">
-            <table class="table my-5">
+            <table class="table mt-3 mb-5">
                 <thead>
                     <tr>
                         <th>Product</th>
@@ -37,7 +37,24 @@
                             </td>
                         </tr>
                     @empty
-                        
+                    @endforelse
+                    @forelse ($customItems as $customItem)
+                        <tr>
+                            <td class="d-flex">
+                                <img src="{{ asset('custom/'.$customItem->image) }}" alt="pic" height="150px" width="200px" style="object-fit: cover">
+                                <div class="ms-3">
+                                    <div class="product-price" id="customprice_{{ $customItem->id }}">{{ $customItem->price }}</div>
+                                </div>
+                            </td>
+                            <td>
+                                <input type="number" name="quantity" id="customquantity_{{ $customItem->id }}" class="me-3 quantity custom" value="{{ $customItem->quantity }}">
+                                <a href="/removeCustomFromCart/{{ $customItem->id }}"><i class="fa-regular fa-trash-can"></i></a>
+                            </td>
+                            <td>
+                                <span class="total" id="customtotal_{{ $customItem->id }}"></span>
+                            </td>
+                        </tr>
+                    @empty
                     @endforelse
                 </tbody>
             </table>
@@ -83,30 +100,45 @@
             let qt = $('#quantity_'+id).val();
             let total = parseFloat(price) * parseFloat(qt);
             $('#total_'+id).html(total);
-            return {
-                orderItemId : id,
-                quantity : qt
-            }
+            return qt;
+        }
+
+        $.fn.getCustomTotal = function(id){
+            let price = $('#customprice_'+id).html();
+            let qt = $('#customquantity_'+id).val();
+            let total = parseFloat(price) * parseFloat(qt);
+            $('#customtotal_'+id).html(total);
+            return qt;
         }
 
         $('.quantity').on("change", function(){
             let elem = event.target.id;
-            let id = elem.split('_')[1];
-            let info = $.fn.getTotal(id);
+            let itemId = elem.split('_')[1];
+            let updateURL;
+            let qt;
+            console.log(this.classList);
+            if(this.classList.contains('custom')){
+                qt = $.fn.getCustomTotal(itemId);
+                updateURL = '/updateCustomQuantity';
+            }else{
+                qt = $.fn.getTotal(itemId);
+                updateURL = '/updateQuantity';
+            }
             $.fn.getSubtotal();
             let subtotal = $('#subtotal').html();
+            console.log("received qt: "+qt)
 
             $.ajax({
-                url:'/updateQuantity',
+                url: updateURL,
                 type: "GET",
                 dataType: 'json',
-                data: {id: info.orderItemId, quantity: info.quantity, total:subtotal},
+                data: {id: itemId, quantity: qt, total:subtotal},
                 success: function (data) {
                     var x = JSON.stringify(data);
                     console.log(x);
                 },
                 error: function (error) {
-                    console.log(`Error ${error}`);
+                    console.log(`Error ${error.message}`);
                 }
             });
         });

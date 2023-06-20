@@ -23,6 +23,7 @@
 }
 
 .customize-button{
+    font-size: 18px;
     background-color: white;
 }
 
@@ -320,4 +321,32 @@
 
 .product .price{
     font-size: 20px;
+}
+
+/* Customization */
+.template-card a{
+    text-decoration: none;
+    color: black;
+}
+
+.template-img{
+    height: auto;
+    width: 100%;
+    object-fit: cover;
+}
+
+.templates{
+    height: 250px;
+    display: flex;
+    align-items: center;
+}
+
+.template-show{
+    width: 100%;
+    height: auto;
+}
+
+.custom-design img{
+    height: 400px;
+    width: auto;
 }

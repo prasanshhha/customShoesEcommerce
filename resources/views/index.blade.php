@@ -15,8 +15,8 @@
                 <h1 class="display-4">FIND YOUR PERFECT PAIR</h1>
                 <p class="lead mb-3">Create the shoes of your dreams.</p>
                 <p class="lead">
-                    <a href="{{ route('categories.all') }}" class="text-white">
-                        <button class="btn customize-button">View Products</button>
+                    <a href="/customize" class="text-white">
+                        <button class="btn rounded-pill customize-button">Customize</button>
                     </a>
                 </p>
             </div>

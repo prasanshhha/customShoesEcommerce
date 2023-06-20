@@ -22,6 +22,9 @@
                         @endforeach
                     </ul>
                 </li>
+                <li class="nav-item ms-4">
+                    <a class="nav-link" aria-current="page" href="/customize">Customize</a>
+                </li>
                 @if (auth()->check())
                 <li class="nav-item ms-4">
                     <form class="form-inline" action="/logout" method="POST">

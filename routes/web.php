@@ -11,6 +11,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserPagesController;
 use App\Http\Controllers\UserOrderController;
 use App\Http\Controllers\OrderItemController;
+use App\Http\Controllers\CustomShoeController;
 use App\Http\Controllers\AdminDashboardController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -71,8 +72,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/wishList', [UserPagesController::class, 'wishList']);
     Route::get('/removeFromWishlist/{id}', [UserOrderController::class, 'removeFromWishlist']);
     Route::get('/removeFromCart/{id}', [UserOrderController::class, 'removeFromCart']);
+    Route::get('/removeCustomFromCart/{id}', [UserOrderController::class, 'removeCustomFromCart']);
     Route::get('/updateQuantity', [UserOrderController::class, 'updateQuantity']);
+    Route::get('/updateCustomQuantity', [UserOrderController::class, 'updateCustomQuantity']);
     Route::get('/checkout', [UserPagesController::class, 'checkout']);
+    Route::get('/customize', [CustomShoeController::class, 'customize']);
+    Route::get('/customize/{id}', [CustomShoeController::class, 'getTemplate']);
+    Route::post('/customize/{id}', [CustomShoeController::class, 'customizeTemplate']);
+    Route::post('/addToCart/custom/{id}', [UserOrderController::class, 'addCustomShoeToCart']);
 });
 
 Route::name('categories.')->group(function(){
@@ -97,7 +104,3 @@ Route::middleware(['role:admin', 'verified'])->name('admin.')->prefix('admin')->
     Route::resource('orderItem', OrderItemController::class);
     Route::get('/order/toggleStatus/{id}', [OrderController::class, 'toggleStatus']);
 });
-
-
-// Auth::routes();
-// Route::get('/home', [HomeController::class, 'index'])->name('home');

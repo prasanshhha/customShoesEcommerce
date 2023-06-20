@@ -35,7 +35,7 @@
                             <label for="payment_method" class="form-label">Payment method</label>
                             <select id="payment_method" class="form-select">
                                 <option id="cod" value="cash_on_delivery">Cash on delivery</option>
-                                <option id="esewa" value="esewa">Esewa</option>
+                                <option id="khalti" value="khalti">Khalti</option>
                             </select>
                         </div>
                         <div class="col-12">
@@ -52,12 +52,25 @@
                             <tr>
                                 <td class="d-flex">
                                     <a href="/viewProduct/{{ $cartItem->product->id }}">
-                                        <img src="{{ asset($cartItem->product->thumbnail) }}" alt="pic" height="150px" width="200px" style="object-fit: cover">
+                                        <img src="{{ asset($cartItem->product->thumbnail) }}" alt="pic" height="100px" width="150px" style="object-fit: cover">
                                     </a>
                                 </td>
                                 <th class="text-start">{{ $cartItem->product->name }}</th>
                                 <th class="price text-start">{{ $cartItem->product->price }}</th>
                                 <th class="text-start">x <span class="quantity">{{ $cartItem->quantity }}</span></th>
+                                <th class="total text-end"></th>
+                            </tr>
+                            @empty
+                                
+                            @endforelse
+                            @forelse ($customItems as $customItem)
+                            <tr>
+                                <td class="d-flex">
+                                    <img src="{{ asset('custom/'.$customItem->image) }}" alt="pic" height="100px" width="150px" style="object-fit: cover">
+                                </td>
+                                <th class="text-start">Custom</th>
+                                <th class="price text-start">{{ $customItem->price }}</th>
+                                <th class="text-start">x <span class="quantity">{{ $customItem->quantity }}</span></th>
                                 <th class="total text-end"></th>
                             </tr>
                             @empty

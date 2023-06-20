@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\OrderItem;
+use App\Models\CustomItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -19,9 +20,14 @@ class UserPagesController extends Controller
         }else{
             $n = $items->count();
         }
-        for($i = 0 ; $i < $n ; $i++){
-            $populars[$i] = Product::findOrFail($items[$i]->product_id);
+        if($n != 0){
+            for($i = 0 ; $i < $n ; $i++){
+                $populars[$i] = Product::findOrFail($items[$i]->product_id);
+            }
+        }else{
+            $populars = [];
         }
+
         return view('index')->with(compact('populars'));
     }
 
@@ -57,7 +63,10 @@ class UserPagesController extends Controller
         $cartItems = OrderItem::whereHas('order', function ($query) use($userId){
             $query->where([['user_id', $userId], ['status', 'cart']]);
         })->get();
-        return view('cart')->with(compact('cartItems'));
+        $customItems = CustomItem::whereHas('order', function ($query) use($userId){
+            $query->where([['user_id', $userId], ['status', 'cart']]);
+        })->get();
+        return view('cart')->with(compact('cartItems', 'customItems'));
     }
 
     public function wishlist(){
@@ -74,6 +83,10 @@ class UserPagesController extends Controller
         $cartItems = OrderItem::whereHas('order', function ($query) use($userId){
             $query->where([['user_id', $userId], ['status', 'cart']]);
         })->get();
-        return view('checkout')->with(compact('cartItems', 'order'));
+        $customItems = CustomItem::whereHas('order', function ($query) use($userId){
+            $query->where([['user_id', $userId], ['status', 'cart']]);
+        })->get();
+        $total_price = '';
+        return view('checkout')->with(compact('cartItems', 'customItems', 'order'));
     }
 }

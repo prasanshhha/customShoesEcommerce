@@ -6,7 +6,9 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Template;
 use App\Models\OrderItem;
+use App\Models\CustomItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,7 +26,7 @@ class UserOrderController extends Controller
             $order->total = $order->total + $cartItem->price;
             $order->save();
         }else{
-            $order = $this->newOrder($cartItem ,$user, "cart");
+            $order = $this->newOrder($cartItem->price ,$user, "cart");
         }
         $orderItem = $this->newOrderItem($order, $cartItem);
         return back()->with('success', "Added to Cart!");
@@ -43,23 +45,50 @@ class UserOrderController extends Controller
             $order->total = $order->total + $wishlistItem->price;
             $order->save();
         }else{
-            $order = $this->newOrder($wishlistItem ,$user, "wishlist");
+            $order = $this->newOrder($wishlistItem->price ,$user, "wishlist");
         }
         $orderItem = $this->newOrderItem($order, $wishlistItem);
         return back()->with('success', "Added to wishlist!");
     }
 
+    public function addCustomShoeToCart(Request $request, $id){
+        $template = Template::findOrFail($id);
+        if(!$template){
+            return back()->with('error', "This template does not exist!");
+        }
+        $user = User::findOrFail(Auth::user()->id);
+        $order = Order::where([['user_id', $user->id], ['status', 'cart']])->first();
+        if($order){
+            $order->total = $order->total + $template->price;
+            $order->save();
+        }else{
+            $order = $this->newOrder($template->price ,$user, "cart");
+        }
+        $orderItem = $this->newCustomOrderItem($order, $template, $request['custom-file']);
+        return back()->with('success', "Added to cart!");
+    }
 
-    public function newOrder($orderItem, $user, $status){
+    public function newOrder($price, $user, $status){
         $newOrder = [
             'user_id' => $user->id,
             'date' => now(),
             'contact' => $user->phone_number,
-            'total' => $orderItem->price,
+            'total' => $price,
             'status' => $status,
         ];
 
         return Order::create($newOrder);
+    }
+
+    public function newCustomOrderItem($order, $template, $filename){
+        $customItem = [
+            'order_id' => $order->id,
+            'image' => $filename,
+            'quantity' => '1',
+            'price' => $template->price
+        ];
+
+        return CustomItem::create($customItem);
     }
 
     public function newOrderItem($order, $orderItem){
@@ -88,6 +117,15 @@ class UserOrderController extends Controller
         return back()->with('success','Removed from cart!');
     }
 
+    public function removeCustomFromCart($id){
+        $customItem = CustomItem::findOrFail($id);
+        $order = Order::findOrFail($customItem->order_id);
+        $order['total'] = $order->total - $customItem->price;
+        $order->save();
+        $customItem->delete();
+        return back()->with('success','Removed from cart!');
+    }
+
     public function updateQuantity(Request $request){
         $orderItem = OrderItem::findOrFail($request->id);
         $orderItem['quantity'] = $request->quantity;
@@ -96,5 +134,15 @@ class UserOrderController extends Controller
         $order['total'] = $request->total;
         $order->save();
         return response()->json(['success' => true, 'data' => $orderItem, $order]);
+    }
+
+    public function updateCustomQuantity(Request $request){
+        $customItem = CustomItem::findOrFail($request->id);
+        $customItem['quantity'] = $request->quantity;
+        $customItem->save();
+        $order = Order::findOrFail($customItem->order_id);
+        $order['total'] = $request->total;
+        $order->save();
+        return response()->json(['success' => true, 'data' => $customItem, $order]);
     }
 }
