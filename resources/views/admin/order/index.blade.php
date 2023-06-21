@@ -30,11 +30,11 @@
                     <td>{{ $order->location }}</td>
                     <td>{{ $order->contact }}</td>
                     <td>{{ $order->total }}</td>
-                    <td>{{ $order->payment_method }}</td>
+                    <td>{{ ucfirst(str_replace('_',' ',$order->payment_method)) }}</td>
                     @if ($order->payment_status == 'pending')
-                        <td><a href="/order/toggleStatus/{{ $order->id }}" class="btn btn-warning rounded-pill">Pending</a></td>
+                        <td><a href="/admin/order/toggleStatus/{{ $order->id }}" class="btn btn-warning rounded-pill">Pending</a></td>
                     @else
-                        <td><a href="/order/toggleStatus/{{ $order->id }}" class="btn btn-success rounded-pill">Complete</a></td>
+                        <td><a href="/admin/order/toggleStatus/{{ $order->id }}" class="btn btn-success rounded-pill">Complete</a></td>
                     @endif
                     <td>{{ $order->date }}</td>
                     <td class="d-flex">
