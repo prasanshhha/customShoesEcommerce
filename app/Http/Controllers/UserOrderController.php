@@ -11,6 +11,7 @@ use App\Models\OrderItem;
 use App\Models\CustomItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\PlaceOrderRequest;
 
 class UserOrderController extends Controller
 {
@@ -144,5 +145,16 @@ class UserOrderController extends Controller
         $order['total'] = $request->total;
         $order->save();
         return response()->json(['success' => true, 'data' => $customItem, $order]);
+    }
+
+    public function placeOrder(PlaceOrderRequest $request, $id){
+        $order = Order::findOrFail($id);
+        $input = $request->validated();
+        $input['status'] = "ordered";
+        $input['date'] = now();
+        $input['location'] = $input['address'].', '.$input['city'];
+        unset($input['name']);
+        $order->update($input);
+        return redirect('/')->with('success', "Your order has been placed!");
     }
 }

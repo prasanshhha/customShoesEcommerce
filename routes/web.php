@@ -72,6 +72,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/customize/{id}', [CustomShoeController::class, 'getTemplate']);
     Route::post('/customize/{id}', [CustomShoeController::class, 'customizeTemplate']);
     Route::post('/addToCart/custom/{id}', [UserOrderController::class, 'addCustomShoeToCart']);
+    Route::post('/place-order/{id}', [UserOrderController::class, 'placeOrder']);
 });
 
 Route::name('categories.')->group(function(){
