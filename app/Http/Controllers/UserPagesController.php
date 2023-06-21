@@ -43,6 +43,12 @@ class UserPagesController extends Controller
         return view('products')->with(compact('products', 'category_name'));
     }
 
+    public function userOrders(){
+        $user = Auth::user();
+        $placed_orders = Order::where([['user_id', $user->id], ['status', 'ordered']])->orderByDesc('date')->get();
+        return view('user-orders')->with(compact('user', 'placed_orders'));
+    }
+
     public function search(Request $request){
         $products = Product::where('name', 'LIKE', '%'.$request->search.'%')
                             ->orWhereHas('category', function ($query) use ($request) {
@@ -75,6 +81,13 @@ class UserPagesController extends Controller
             $query->where([['user_id', $userId], ['status', 'wishlist']]);
         })->get();
         return view('wishlist')->with(compact('wishlistItems'));
+    }
+
+    public function orderDetails($id){
+        $order = Order::findOrFail($id);
+        $orderItems = OrderItem::where('order_id', $order->id)->get();
+        $customItems = CustomItem::where('order_id', $order->id)->get();
+        return view('order-details')->with(compact('order', 'orderItems', 'customItems'));
     }
 
     public function checkout(){

@@ -43,6 +43,7 @@
                             <td class="d-flex">
                                 <img src="{{ asset('custom/'.$customItem->image) }}" alt="pic" height="150px" width="200px" style="object-fit: cover">
                                 <div class="ms-3">
+                                    Custom Shoes
                                     <div class="product-price" id="customprice_{{ $customItem->id }}">{{ $customItem->price }}</div>
                                 </div>
                             </td>

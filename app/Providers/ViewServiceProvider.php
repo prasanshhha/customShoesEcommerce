@@ -30,7 +30,12 @@ class ViewServiceProvider extends ServiceProvider
         View::composer('layouts.nav', function ($view) {
             $view->with('categories', Category::select('id', 'name')->get());
             if (Auth::check()) {
-                $view->with('cartCount', Order::where([['user_id', Auth::user()->id], ['status', 'cart']])->has('orderItems')->get()->count());
+                $view->with(
+                    'cartCount', Order::where([['user_id', Auth::user()->id], ['status', 'cart']])
+                    ->where(function ($query) {
+                        $query->has('orderItems')->orHas('customItems');
+                    })->get()->count()
+                );
                 $view->with('wishlistCount', Order::where([['user_id', Auth::user()->id], ['status', 'wishlist']])->has('orderItems')->get()->count());
             }
         });

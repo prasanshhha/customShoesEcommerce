@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\OrderItem;
+use App\Models\CustomItem;
 use App\Models\User;
 
 class Order extends Model
@@ -30,5 +31,10 @@ class Order extends Model
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function customItems()
+    {
+        return $this->hasMany(CustomItem::class);
     }
 }

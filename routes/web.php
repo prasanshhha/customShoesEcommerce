@@ -58,21 +58,23 @@ Route::middleware(['guest'])->name('password.')->group(function(){
 
 //Logged In routes
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/addToCart/{id}', [UserOrderController::class, 'addToCart']);
-    Route::get('/addToWishlist/{id}', [UserOrderController::class, 'addToWishlist']);
+    Route::get('/user-orders', [UserPagesController::class, 'userOrders'])->name('user-orders');
     Route::get('/cart', [UserPagesController::class, 'cart']);
     Route::get('/wishList', [UserPagesController::class, 'wishList']);
-    Route::get('/removeFromWishlist/{id}', [UserOrderController::class, 'removeFromWishlist']);
+    Route::get('/addToCart/{id}', [UserOrderController::class, 'addToCart']);
+    Route::get('/addToWishlist/{id}', [UserOrderController::class, 'addToWishlist']);
     Route::get('/removeFromCart/{id}', [UserOrderController::class, 'removeFromCart']);
+    Route::get('/removeFromWishlist/{id}', [UserOrderController::class, 'removeFromWishlist']);
     Route::get('/removeCustomFromCart/{id}', [UserOrderController::class, 'removeCustomFromCart']);
     Route::get('/updateQuantity', [UserOrderController::class, 'updateQuantity']);
     Route::get('/updateCustomQuantity', [UserOrderController::class, 'updateCustomQuantity']);
-    Route::get('/checkout', [UserPagesController::class, 'checkout']);
-    Route::get('/customize', [CustomShoeController::class, 'customize']);
+    Route::get('/customize', [CustomShoeController::class, 'customize'])->name('customize');
     Route::get('/customize/{id}', [CustomShoeController::class, 'getTemplate']);
     Route::post('/customize/{id}', [CustomShoeController::class, 'customizeTemplate']);
     Route::post('/addToCart/custom/{id}', [UserOrderController::class, 'addCustomShoeToCart']);
+    Route::get('/checkout', [UserPagesController::class, 'checkout']);
     Route::post('/place-order/{id}', [UserOrderController::class, 'placeOrder']);
+    Route::get('/order-details/{id}', [UserPagesController::class, 'orderDetails']);
 });
 
 Route::name('categories.')->group(function(){

@@ -9,7 +9,7 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item ms-4">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    <a class="nav-link active" aria-current="page" href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="nav-item dropdown ms-4">
                     <a class="nav-link dropdown-toggle" href="{{ route('categories.all') }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -23,18 +23,28 @@
                     </ul>
                 </li>
                 <li class="nav-item ms-4">
-                    <a class="nav-link" aria-current="page" href="/customize">Customize</a>
+                    <a class="nav-link" aria-current="page" href="{{ route('customize') }}">Customize</a>
                 </li>
                 @if (auth()->check())
                 <li class="nav-item ms-4">
-                    <form class="form-inline" action="/logout" method="POST">
+                    <a class="nav-link" aria-current="page" href="{{ route('user-orders') }}">My Orders</a>
+                </li>
+                @endif
+                @if (auth()->check())
+                <li class="nav-item ms-4">
+                    <form class="form-inline" action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button class="btn btn-link logout-button" type="submit">Logout</button>
                     </form>
                 </li>
                 @else
                 <li class="nav-item ms-4">
-                    <a class="nav-link" href="/login">Login</a>
+                    <a class="nav-link" href="{{ route('login') }}">Login</a>
+                </li>
+                @endif
+                @if (auth()->check() && auth()->user()->isAdmin())
+                <li class="nav-item ms-4">
+                    <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
                 </li>
                 @endif
             </ul>
