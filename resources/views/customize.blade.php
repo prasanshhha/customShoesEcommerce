@@ -6,9 +6,9 @@
 <div class="container page">
     <div class="customize container mb-5 pb-5">
         <h2 class="mb-5 pt-5">Customize your shoes!</h2><hr>
-        <div class="row row-cols-3">
+        <div class="row row-cols-2">
             @forelse ($templates as $template)
-            <div  class="template-card col mb-4">
+            <div  class="template-card col ">
                 <a href="/customize/{{ $template->id }}">
                     <div class="templates">
                         <img src="{{ asset("assets/images/templates/".$template->image)}}" class="template-img" alt="img">

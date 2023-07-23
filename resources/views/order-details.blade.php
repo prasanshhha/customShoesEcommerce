@@ -61,8 +61,8 @@
                             <td class="d-flex">
                                 <img src="{{ asset('custom/'.$customItem->image) }}" alt="pic" height="100px" width="150px" style="object-fit: cover">
                             </td>
-                            <td>{{ $orderItem->name }}</td>
-                            <td>{{ $orderItem->price }}</td>
+                            <td>Custom Shoe</td>
+                            <td>{{ $customItem->price }}</td>
                             <td>{{ $customItem->quantity }}</td>
                             <td>{{ $customItem->quantity*$customItem->price }}</td>
                         </tr>

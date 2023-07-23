@@ -30,13 +30,13 @@
                         </div>
                         <div class="col-md-6">
                             <label for="payment_method" class="form-label">Payment method</label>
-                            <select id="payment_method" class="form-select" name="payment_method">
+                            <select id="payment_method" class="form-select" name="payment_method" id="payment_method">
                                 <option id="cod" value="cash_on_delivery" selected>Cash on delivery</option>
-                                <option id="khalti" value="khalti">Khalti</option>
+                                <option id="esewa" value="esewa">eSewa</option>
                             </select>
                         </div>
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary">Place Order</button>
+                            <button type="submit" id="codPay" class="btn btn-primary">Place Order</button>
                         </div>
                     </form>
                 </div>

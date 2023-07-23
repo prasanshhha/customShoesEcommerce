@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Template;
 use Illuminate\Http\Request;
+use App\Http\Requests\CustomizeRequest;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class CustomShoeController extends Controller
@@ -18,7 +19,7 @@ class CustomShoeController extends Controller
         return view('template')->with(compact('template'));
     }
 
-    public function customizeTemplate(Request $request, $templateId){
+    public function customizeTemplate(CustomizeRequest $request, $templateId){
         $template = Template::findOrFail($templateId);
 
         // Image Intervention

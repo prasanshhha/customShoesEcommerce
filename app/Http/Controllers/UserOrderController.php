@@ -105,6 +105,9 @@ class UserOrderController extends Controller
 
     public function removeFromWishlist($id){
         $wishlistItem = OrderItem::findOrFail($id);
+        $order = Order::findOrFail($wishlistItem->order_id);
+        $order['total'] = $order->total - $wishlistItem->price;
+        $order->save();
         $wishlistItem->delete();
         return back()->with('success','Removed from wishlist!');
     }
@@ -145,16 +148,5 @@ class UserOrderController extends Controller
         $order['total'] = $request->total;
         $order->save();
         return response()->json(['success' => true, 'data' => $customItem, $order]);
-    }
-
-    public function placeOrder(PlaceOrderRequest $request, $id){
-        $order = Order::findOrFail($id);
-        $input = $request->validated();
-        $input['status'] = "ordered";
-        $input['date'] = now();
-        $input['location'] = $input['address'].', '.$input['city'];
-        unset($input['name']);
-        $order->update($input);
-        return redirect('/')->with('success', "Your order has been placed!");
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserPagesController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserOrderController;
 use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\CustomShoeController;
@@ -73,8 +74,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/customize/{id}', [CustomShoeController::class, 'customizeTemplate']);
     Route::post('/addToCart/custom/{id}', [UserOrderController::class, 'addCustomShoeToCart']);
     Route::get('/checkout', [UserPagesController::class, 'checkout']);
-    Route::post('/place-order/{id}', [UserOrderController::class, 'placeOrder']);
-    Route::get('/order-details/{id}', [UserPagesController::class, 'orderDetails']);
+    Route::get('order-details/{id}', [UserPagesController::class, 'orderDetails']);
+    Route::post('/place-order/{id}', [PaymentController::class, 'placeOrder']);
+    Route::post('/place-order-esewa/{id}', [PaymentController::class, 'esewaPay']);
+    Route::get('/success', [UserPagesController::class, 'esewaPaySuccess']);
+    Route::get('/failure', [UserPagesController::class, 'esewaPayFailed']);
 });
 
 Route::name('categories.')->group(function(){

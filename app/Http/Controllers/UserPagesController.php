@@ -14,21 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class UserPagesController extends Controller
 {
     public function homepage(){
-        $items = OrderItem::select('product_id', DB::raw('count(product_id) AS total_count'))->groupBy('product_id')->orderByDesc('total_count')->get();
-        if($items->count() >= 3){
-            $n = 3;
-        }else{
-            $n = $items->count();
-        }
-        if($n != 0){
-            for($i = 0 ; $i < $n ; $i++){
-                $populars[$i] = Product::findOrFail($items[$i]->product_id);
-            }
-        }else{
-            $populars = [];
-        }
-
-        return view('index')->with(compact('populars'));
+        return view('index');
     }
 
     public function allCategories(){
@@ -41,12 +27,6 @@ class UserPagesController extends Controller
         $products = Product::select('id', 'name', 'description', 'thumbnail', 'image_one', 'stock', 'price', 'category_id')->where('category_id', $id)->get();
         $category_name = Category::select('name')->where('id', $id)->first()->name;
         return view('products')->with(compact('products', 'category_name'));
-    }
-
-    public function userOrders(){
-        $user = Auth::user();
-        $placed_orders = Order::where([['user_id', $user->id], ['status', 'ordered']])->orderByDesc('date')->get();
-        return view('user-orders')->with(compact('user', 'placed_orders'));
     }
 
     public function search(Request $request){
@@ -83,13 +63,6 @@ class UserPagesController extends Controller
         return view('wishlist')->with(compact('wishlistItems'));
     }
 
-    public function orderDetails($id){
-        $order = Order::findOrFail($id);
-        $orderItems = OrderItem::where('order_id', $order->id)->get();
-        $customItems = CustomItem::where('order_id', $order->id)->get();
-        return view('order-details')->with(compact('order', 'orderItems', 'customItems'));
-    }
-
     public function checkout(){
         $userId = Auth::user()->id;
         $order = Order::where([['user_id', $userId], ['status', 'cart']])->first();
@@ -101,5 +74,18 @@ class UserPagesController extends Controller
         })->get();
         $total_price = '';
         return view('checkout')->with(compact('cartItems', 'customItems', 'order'));
+    }
+
+    public function userOrders(){
+        $user = Auth::user();
+        $placed_orders = Order::where([['user_id', $user->id], ['status', 'ordered']])->orderByDesc('id')->get();
+        return view('user-orders')->with(compact('user', 'placed_orders'));
+    }
+
+    public function orderDetails($id){
+        $order = Order::findOrFail($id);
+        $orderItems = OrderItem::where('order_id', $order->id)->get();
+        $customItems = CustomItem::where('order_id', $order->id)->get();
+        return view('order-details')->with(compact('order', 'orderItems', 'customItems'));
     }
 }

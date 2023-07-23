@@ -40,6 +40,7 @@
             </div>
         </div>
     </section>
+    @include('layouts.populars')
 </div>
 
 @endsection
