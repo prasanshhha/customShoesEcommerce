@@ -140,6 +140,11 @@
                 },
                 error: function (error) {
                     console.log(`Error ${error.message}`);
+                    Swal.fire({
+                        title: "Stock depleted",
+                        text: "Not enough stock for your order.",
+                        icon: "error"
+                    });
                 }
             });
         });

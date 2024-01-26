@@ -27,7 +27,7 @@ class PlaceOrderRequest extends FormRequest
             'address' => 'required|max:200',
             'city' => 'required|max:200',
             'contact' => 'required|integer|min_digits:7|max_digits:10|min:0',
-            'payment_method' => 'required|in:cash_on_delivery,esewa'
+            'payment_method' => 'required|in:cash_on_delivery,card'
         ];
     }
 }

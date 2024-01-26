@@ -132,6 +132,10 @@ class UserOrderController extends Controller
 
     public function updateQuantity(Request $request){
         $orderItem = OrderItem::findOrFail($request->id);
+        if($orderItem->product->stock < $request->quantity){
+            abort();
+            return response()->json(['error' => true, 'message'=>"Not enough stock"]);
+        }
         $orderItem['quantity'] = $request->quantity;
         $orderItem->save();
         $order = Order::findOrFail($orderItem->order_id);
@@ -141,6 +145,7 @@ class UserOrderController extends Controller
     }
 
     public function updateCustomQuantity(Request $request){
+        
         $customItem = CustomItem::findOrFail($request->id);
         $customItem['quantity'] = $request->quantity;
         $customItem->save();

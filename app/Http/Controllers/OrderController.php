@@ -75,9 +75,13 @@ class OrderController extends Controller
      */
     public function update(OrderRequest $request, $id)
     {
-        $order = Order::findOrFail($id);
-        $order->update($request->validated());
-        return redirect()->route('admin.order.index')->with('message', 'Order updated!');
+        try{
+            $order = Order::findOrFail($id);
+            $order->update($request->validated());
+            return redirect()->route('admin.order.index')->with('message', 'Order updated!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', "Cannot update this order.");
+        }
     }
 
     /**
@@ -88,9 +92,13 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        $order = Order::findOrFail($id);
-        $order->delete();
-        return redirect()->route('admin.order.index')->with('success','Order deleted!');
+        try{
+            $order = Order::findOrFail($id);
+            $order->delete();
+            return redirect()->route('admin.order.index')->with('success','Order deleted!');
+        }catch (\Exception $e) {
+            return redirect()->back()->with('error', "Cannot delete this order.");
+        }
     }
 
     public function toggleStatus($id){

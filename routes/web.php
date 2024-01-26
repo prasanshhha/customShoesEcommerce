@@ -76,9 +76,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/checkout', [UserPagesController::class, 'checkout']);
     Route::get('order-details/{id}', [UserPagesController::class, 'orderDetails']);
     Route::post('/place-order/{id}', [PaymentController::class, 'placeOrder']);
-    Route::post('/place-order-esewa/{id}', [PaymentController::class, 'esewaPay']);
-    Route::get('/success', [UserPagesController::class, 'esewaPaySuccess']);
-    Route::get('/failure', [UserPagesController::class, 'esewaPayFailed']);
+    Route::get('/success/{id}', [PaymentController::class, 'cardPaySuccess'])->name('success');
+    Route::get('/failure', [PaymentController::class, 'cardPayFailed'])->name('failure');
 });
 
 Route::name('categories.')->group(function(){

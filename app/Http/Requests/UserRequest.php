@@ -27,7 +27,7 @@ class UserRequest extends FormRequest
             'name'=>'required|max:255',
             'email'=>'required|email|unique:users,email,'.$this->route()?->user,
             'is_admin'=>'required|boolean',
-            'phone_number'=>'required|integer|min_digits:7|max_digits:10|min:0'
+            'phone_number'=>'required|integer|unique:users,phone_number|min_digits:7|max_digits:10|min:0'
         ];
     }
 }

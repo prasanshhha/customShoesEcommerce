@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Mail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
@@ -43,7 +43,10 @@ class UserController extends Controller
         $password = Hash::make("1AdminPassword?");
         $input['password'] = $password;
         $user = User::create($input);
-        return redirect()->route('admin.user.index')->with('message', 'New admin added!');
+        Mail::send('mail.new-admin', $input, function($message) use ($request){
+            $message->to($request->email, $request->name)->subject('New Admin Credentials');
+        });
+        return redirect()->route('admin.user.index')->with('success', 'New admin added!');
     }
 
     /**
@@ -79,9 +82,13 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, $id)
     {
-        $user = User::findOrFail($id);
-        $user->update($request->validated());
-        return redirect()->route('admin.user.index')->with('success','User updated!');
+        try{
+            $user = User::findOrFail($id);
+            $user->update($request->validated());
+            return redirect()->route('admin.user.index')->with('success','User updated!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', "Cannot update this user.");
+        }
     }
 
     /**
@@ -92,13 +99,17 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user_count = User::count();
-        if($user_count <= 1){
-            return redirect()->route('admin.user.index')->with('error','Last user cannot be deleted!');
-        }else{
-            $user = User::findOrFail($id);
-            $user->delete();
-            return redirect()->route('admin.user.index')->with('success','User deleted!');
+        try{
+            $user_count = User::count();
+            if($user_count <= 1){
+                return redirect()->route('admin.user.index')->with('error','Last user cannot be deleted!');
+            }else{
+                $user = User::findOrFail($id);
+                $user->delete();
+                return redirect()->route('admin.user.index')->with('success','User deleted!');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', "Cannot delete this user.");
         }
     }
 }

@@ -32,7 +32,7 @@
                             <label for="payment_method" class="form-label">Payment method</label>
                             <select id="payment_method" class="form-select" name="payment_method" id="payment_method">
                                 <option id="cod" value="cash_on_delivery" selected>Cash on delivery</option>
-                                <option id="esewa" value="esewa">eSewa</option>
+                                <option id="card" value="card">Card Payment</option>
                             </select>
                         </div>
                         <div class="col-12">

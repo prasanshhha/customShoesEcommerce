@@ -82,23 +82,27 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, $id)
     {
-        $product = Product::findOrFail($id);
-        $input = $request->validated();
-        $files_arr = ['thumbnail', 'image_one', 'image_two', 'image_three'];
-        foreach($request->file() as $key => $file){
-            $path = $file->store('shoes');
-            $input[$key] = $path;
-            if(($i = array_search($key, $files_arr)) !== false) {
-                unset($files_arr[$i]);
-            }
-            if($product[$key] && \Storage::exists($product[$key]))
+        try{
+            $product = Product::findOrFail($id);
+            $input = $request->validated();
+            $files_arr = ['thumbnail', 'image_one', 'image_two', 'image_three'];
+            foreach($request->file() as $key => $file){
+                $path = $file->store('shoes');
+                $input[$key] = $path;
+                if(($i = array_search($key, $files_arr)) !== false) {
+                    unset($files_arr[$i]);
+                }
+                if($product[$key] && \Storage::exists($product[$key]))
                 \Storage::delete($product[$key]);
+            }
+            foreach($files_arr as $file){
+                unset($input[$file]);
+            }
+            $product->update($input);
+            return redirect()->route('admin.product.index')->with('message', 'Product updated!');
+        }catch (\Exception $e) {
+            return redirect()->back()->with('error', "Cannot delete this user.");
         }
-        foreach($files_arr as $file){
-            unset($input[$file]);
-        }
-        $product->update($input);
-        return redirect()->route('admin.product.index')->with('message', 'Product updated!');
     }
 
     /**

@@ -30,4 +30,13 @@ class SignInRequest extends FormRequest
             'phone_number'=>'required|integer|min_digits:7|max_digits:10|min:0'
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'password.regex' => 'The password should have atleast one capital letter, lower-case letter, a number and a special character.',
+            'phone_number.min_digits' => 'Phone number should have atleast 7 digits.',
+            'phone_number.max_digits' => 'Phone number cannot have more than 10 digits.',
+        ];
+    }
 }

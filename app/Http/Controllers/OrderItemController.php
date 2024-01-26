@@ -75,9 +75,13 @@ class OrderItemController extends Controller
      */
     public function update(OrderItemRequest $request, $id)
     {
-        $orderItem = OrderItem::findOrFail($id);
-        $orderItem->update($request->validated());
-        return redirect('/orderItem')->with('message', 'Order item updated!');
+        try{
+            $orderItem = OrderItem::findOrFail($id);
+            $orderItem->update($request->validated());
+            return redirect('/orderItem')->with('message', 'Order item updated!');
+        }catch (\Exception $e) {
+            return redirect()->back()->with('error', "Cannot update this order item.");
+        }
     }
 
     /**
@@ -88,8 +92,12 @@ class OrderItemController extends Controller
      */
     public function destroy($id)
     {
-        $orderItem = OrderItem::findOrFail($id);
-        $orderItem->delete();
-        return redirect('/orderItem')->with('success','Order item deleted!');
+        try{
+            $orderItem = OrderItem::findOrFail($id);
+            $orderItem->delete();
+            return redirect('/orderItem')->with('success','Order item deleted!');
+        }catch (\Exception $e) {
+            return redirect()->back()->with('error', "Cannot delete this order item.");
+        }
     }
 }

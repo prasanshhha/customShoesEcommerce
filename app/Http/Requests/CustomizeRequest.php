@@ -30,12 +30,12 @@ class CustomizeRequest extends FormRequest
     }
 
     public function messages()
-{
-    return [
-        'custom_img.required' => 'An image is required for customization',
-        'img_position.required' => 'Please set position for custom design',
-        'custom_img.mimes' => 'Please upload an allowed file type',
-        'img_position.in' => 'Invalid image position'
-    ];
-}
+    {
+        return [
+            'custom_img.required' => 'An image is required for customization',
+            'img_position.required' => 'Please set position for custom design',
+            'custom_img.mimes' => 'Please upload an allowed file type',
+            'img_position.in' => 'Invalid image position'
+        ];
+    }
 }

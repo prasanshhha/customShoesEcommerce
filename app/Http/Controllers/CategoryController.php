@@ -75,9 +75,13 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, $id)
     {
-        $category = Category::findOrFail($id);
-        $category->update($request->validated());
-        return redirect()->route('admin.category.index')->with('message', 'Category updated!');
+        try {
+            $category = Category::findOrFail($id);
+            $category->update($request->validated());
+            return redirect()->route('admin.category.index')->with('message', 'Category updated!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', "Cannot update category with products.");
+        }
     }
 
     /**
@@ -88,8 +92,12 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::findOrFail($id);
-        $category->delete();
-        return redirect()->route('admin.category.index')->with('success','Category deleted!');
+        try {
+            $category = Category::findOrFail($id);
+            $category->delete();
+            return redirect()->route('admin.category.index')->with('success','Category deleted!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', "Cannot delete category with products.");
+        }
     }
 }
